@@ -25,7 +25,8 @@
 	"dependencies": {
 		"@microsoft/fetch-event-source": "^2.0.1",
 		"@propelauth/javascript": "^2.0.14",
-		"@propelauth/node": "^2.1.12"
+		"@propelauth/node": "^2.1.12",
+		"chart.js": "^4.4.2"
 	},
 	"type": "module"
 }
