@@ -2,9 +2,15 @@
     import Popup from "$lib/components/Popup.svelte";
     import Sidebar from "./Sidebar.svelte";
     import { fetchEventSource } from '@microsoft/fetch-event-source';
-    import type { UserAuth } from "$lib/types";
-    export let data: { auth: UserAuth };
     import LineGraph from "$lib/components/LineGraph.svelte";
+    import type { UserAuth, UserPortfolio } from "$lib/types";
+    import { onMount } from "svelte";
+    import Topbar from "./Topbar.svelte";
+
+    export let data: {
+        auth: UserAuth,
+        portfolio: UserPortfolio
+    };
 
     let sidebarOpen = false;
 
@@ -30,41 +36,40 @@
         message = "";
     };
 
-    fetchEventSource("/api/chat", {
-        headers: {
-            "Authorization": bearer
-        },
-        onmessage(event) {
-            message_log.push(event.data);
-            message_log = message_log;
-        },
+    onMount(()=>{
+        fetchEventSource("/api/chat", {
+            headers: {
+                "Authorization": bearer
+            },
+            onmessage(event) {
+                message_log.push(event.data);
+                message_log = message_log;
+            },
+        });
     });
 
     // ---------------------- end chat feature ----------------------
 
-    // todo: detect mobile and improve mobile layout
-    let mobile = false;
+    let screenWidth = 0;
+    $: mobile = screenWidth < 768;
 </script>
 
+<svelte:window bind:innerWidth={screenWidth} />
 
 <!-- General layout concept -->
 <div class="flex flex-row h-screen">
     {#if !mobile}
-        <Sidebar auth={data.auth} />
+        <Sidebar {...data} />
     {/if}
     <div class="flex flex-col w-full">
+        <Topbar {...data} {mobile} bind:sidebarOpen={sidebarOpen} />
         {#if mobile}
             <Popup bind:open={sidebarOpen}>
-                <Sidebar auth={data.auth} />
+                <Sidebar {...data} />
             </Popup>
-            <button on:click={()=>{
-                sidebarOpen = true;
-            }}>
-                open
-            </button>
         {/if}
-        <div class="flex flex-row h-full">
-            <div class="border border-sky-400 w-full h-full p-2">Net worth graph
+        <div class="grid grid-cols-1 md:grid-cols-2 md:h-full">
+            <div class="border border-sky-400 w-full md:h-full p-2">Net worth graph
 
                 <!-- Temporary placement of temporary chat window -->
                 <div id="chat-window">
@@ -80,14 +85,14 @@
                 </div>
 
             </div>
-            <div class="border border-green-200 w-full h-full p-2">Selected coin graph
+            <div class="border border-green-200 w-full md:h-full p-2">Selected coin graph
                <LineGraph /> 
             </div>
         </div>
-        <div class="flex flex-row h-full">
-            <div class="border border-blue-400 w-full h-full p-2">Create a coin</div>
-            <div class="border border-teal-400 w-full h-full p-2">Leaderboard</div>
-            <div class="border border-cyan-400 w-full h-full p-2">Top coins</div>
+        <div class="grid grid-cols-1 md:grid-cols-3 md:h-full">
+            <div class="border border-blue-400 w-full md:h-full p-2">Create a coin</div>
+            <div class="border border-teal-400 w-full md:h-full p-2">Leaderboard</div>
+            <div class="border border-cyan-400 w-full md:h-full p-2">Top coins</div>
         </div>
         <!-- this won't actually be a <marquee/> later -->
         <marquee>Social media mechanic quick view</marquee>

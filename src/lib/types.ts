@@ -4,3 +4,7 @@ export interface UserAuth {
     client: IAuthClient;
     info: AuthenticationInfo;
 }
+
+export interface UserPortfolio {
+    liquid: number;
+}

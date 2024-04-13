@@ -1,180 +1,130 @@
 <script lang="ts">
-  import Chart from "chart.js/auto";
-  import { browser } from "$app/environment";
-  import { onMount } from "svelte";
+    import Chart from "chart.js/auto";
+    import { onMount } from "svelte";
 
-  const data = {
-    labels: [1, 2, 3, 4, 5, 6, 7],
-    datasets: [
-      {
-        label: "Weekly Sales",
-        data: [10, 12, 6, 9, 12, 3, 9],
-        backgroundColor: [
-          "rgba(255, 26, 104, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-          "rgba(0, 0, 0, 0.2)",
+    export let datapoints: number[] = [10, 12, 13, 8.5, 6, 9, 11, 4];
+    export let label: string = "Value";
+    export let history: number = 50;
+
+    let data = {
+        labels: Array(history).fill("|"),
+        datasets: [
+            {
+                label,
+                data: [...datapoints, ...Array(history).fill(null)],
+                fill: {
+                    target: {
+                        value: datapoints[0],
+                    },
+
+                    below: (context: any) => {
+                        const chart = context.chart;
+                        const { ctx, chartArea, data, scales } = chart;
+                        if (!chartArea) {
+                          return null;
+                        }
+                        return belowGradient(ctx, chartArea, data, scales);
+                    },
+
+                    above: (context: any) => {
+                        const chart = context.chart;
+                        const { ctx, chartArea, data, scales } = chart;
+                        if (!chartArea) {
+                          return null;
+                        }
+                        return aboveGradient(ctx, chartArea, data, scales);
+                    },
+                },
+                borderColor: (context: any) => {
+                    const chart = context.chart;
+                    const { ctx, chartArea, data, scales } = chart;
+                    if (!chartArea) {
+                        return null;
+                    }
+                    return getGradient(ctx, chartArea, data, scales);
+                },
+                tension: 0.4,
+                pointRadius: 0,
+                pointHitRadius: 10,
+                hoverPointRadius: 0,
+            },
         ],
-        fill: {
-          target: {
-            value: 10,
-          },
-          below: (context: any) => {
-            const chart = context.chart;
-            const { ctx, chartArea, data, scales } = chart;
-            if (!chartArea) {
-              return null;
-            }
-            return belowGradient(ctx, chartArea, data, scales);
-          },
-
-          above: (context: any) => {
-            const chart = context.chart;
-            const { ctx, chartArea, data, scales } = chart;
-            if (!chartArea) {
-              return null;
-            }
-            return aboveGradient(ctx, chartArea, data, scales);
-          },
-        },
-        borderColor: (context: any) => {
-          const chart = context.chart;
-          const { ctx, chartArea, data, scales } = chart;
-          if (!chartArea) {
-            return null;
-          }
-          return getGradient(ctx, chartArea, data, scales);
-        },
-        tension: 0.4,
-        pointRadius: 0,
-        pointHitRadius: 10,
-        hoverPointRadius: 0,
-      },
-    ],
-  };
-
-  const config = {
-    type: "line",
-    data,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-        //plugins: {
-        //legends: {
-        //  display: false
-        //}
-        //}
-      },
-      //plugins:[dottedLine]
-    },
-  };
-
-  function getGradient(ctx: any, chartArea: any, data: any, scales: any) {
-    const { left, right, top, bottom, width, height } = chartArea;
-    const { x, y } = scales;
-    const gradientBorder = ctx.createLinearGradient(0, 0, 0, bottom);
-    const shift = y.getPixelForValue(data.datasets[0].data[0]) / bottom;
-    gradientBorder.addColorStop(0, "rgba(75, 192, 192, 1)");
-    gradientBorder.addColorStop(shift, "rgba(75, 192, 192, 1)");
-    gradientBorder.addColorStop(shift, "rgba(255, 26, 104, 1)");
-    gradientBorder.addColorStop(1, "rgba(255, 26, 104, 1)");
-    return gradientBorder;
-  }
-  function belowGradient(ctx: any, chartArea: any, data: any, scales: any) {
-    const { left, right, top, bottom, width, height } = chartArea;
-    const { x, y } = scales;
-    const gradientBackground = ctx.createLinearGradient(
-      0,
-      y.getPixelForValue(data.datasets[0].data[0]),
-      0,
-      bottom,
-    );
-    gradientBackground.addColorStop(0, "rgba(255, 26, 104, 0)");
-    gradientBackground.addColorStop(1, "rgba(255, 26, 104, 0.7)");
-    return gradientBackground;
-  }
-
-  function aboveGradient(ctx: any, chartArea: any, data: any, scales: any) {
-    const { left, right, top, bottom, width, height } = chartArea;
-    const { x, y } = scales;
-    const gradientBackground = ctx.createLinearGradient(
-      0,
-      y.getPixelForValue(data.datasets[0].data[0]),
-      0,
-      top,
-    );
-    gradientBackground.addColorStop(0, "rgba(75, 192, 192, 0)");
-    gradientBackground.addColorStop(1, "rgba(75, 192, 192, .7)");
-    return gradientBackground;
-  }
-  function addData(chart: any, label: any, newData: any) {
-    chart.data.labels.push(label);
-    chart.data.datasets.forEach((dataset: any) => {
-      dataset.data.push(newData);
-    });
-    chart.update("none");
-    updateScales(chart);
-  }
-
-  function removeData(chart: any) {
-    chart.data.labels.pop();
-    chart.data.datasets.forEach((dataset: any) => {
-      dataset.data.pop();
-    });
-    chart.update("none");
-  }
-  function updateScales(chart: any) {
-    let xScale = chart.scales.x;
-    let yScale = chart.scales.y;
-    chart.options.scales = {
-      newId: {
-        display: true,
-      },
-      y: {
-        display: true,
-        type: "logarithmic",
-      },
     };
-    chart.update("none");
-    // need to update the reference
-    xScale = chart.scales.newId;
-    yScale = chart.scales.y;
-  }
 
-  const dottedLine = {
-    id: "dottedLine",
-    beforeDatasetsDraw(chart: any, args: any, pluginOptions: any) {
-      const {
-        ctx,
+    const config = {
+        type: "line",
         data,
-        chartArea: { left, right, width },
-        scales: { x, y },
-      } = chart;
-      ctx.save();
-      ctx.beginPath();
-      ctx.lineWidth = 1;
-      ctx.setLineDash([1, 5]);
-      ctx.strokeStyle = "rgba(102, 102, 102, 1)";
-      ctx.moveTo(left, y.getPixelForValue(data.datasets[0].data[0]));
-      ctx.lineTo(right, y.getPixelForValue(data.datasets[0].data[0]));
-      ctx.stroke();
-      ctx.closePath();
-      ctx.setLineDash([0, 0]);
-    },
-  };
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: false,
+                },
+            },
+        },
+    };
 
-  let chartDomObject: HTMLCanvasElement;
+    function getGradient(ctx: any, chartArea: any, data: any, scales: any) {
+        const { bottom } = chartArea;
+        const { y } = scales;
+        const gradientBorder = ctx.createLinearGradient(0, 0, 0, bottom);
+        const shift = y.getPixelForValue(data.datasets[0].data[0]) / bottom;
+        gradientBorder.addColorStop(0, "rgba(75, 192, 192, 1)");
+        gradientBorder.addColorStop(shift, "rgba(75, 192, 192, 1)");
+        gradientBorder.addColorStop(shift, "rgba(255, 26, 104, 1)");
+        gradientBorder.addColorStop(1, "rgba(255, 26, 104, 1)");
+        return gradientBorder;
+    }
+    function belowGradient(ctx: any, chartArea: any, data: any, scales: any) {
+        const { bottom } = chartArea;
+        const { y } = scales;
+        const gradientBackground = ctx.createLinearGradient(
+            0,
+            y.getPixelForValue(data.datasets[0].data[0]),
+            0,
+            bottom,
+        );
+        gradientBackground.addColorStop(0, "rgba(255, 26, 104, 0)");
+        gradientBackground.addColorStop(1, "rgba(255, 26, 104, 0.1)");
+        return gradientBackground;
+    }
 
-  onMount(() => {
-    // @ts-ignore, the config is valid but TS does not agree
-    new Chart(chartDomObject, config);
-    chartDomObject.innerText = Chart.version;
-  });
+    function aboveGradient(ctx: any, chartArea: any, data: any, scales: any) {
+        const { top } = chartArea;
+        const { y } = scales;
+        const gradientBackground = ctx.createLinearGradient(
+            0,
+            y.getPixelForValue(data.datasets[0].data[0]),
+            0,
+            top,
+        );
+        gradientBackground.addColorStop(0, "rgba(75, 192, 192, 0)");
+        gradientBackground.addColorStop(1, "rgba(75, 192, 192, .1)");
+        return gradientBackground;
+    }
+    
+    let chartDomObject: HTMLCanvasElement;
+
+    onMount(() => {
+        // @ts-ignore, the config is valid but TS does not agree
+        let chart = new Chart(chartDomObject, config);
+        chartDomObject.innerText = Chart.version;
+
+        let interval = setInterval(()=>{
+            if(datapoints.length >= history){
+                datapoints.shift();
+            }
+            datapoints.push(datapoints[datapoints.length-1] + (Math.random() * 10) - 4.8);
+            data.datasets[0].data = [
+                ...datapoints, 
+                ...Array(history-datapoints.length).fill(null)
+            ];
+            data.datasets[0].fill.target.value = datapoints[0];
+
+            chart.update("resize");
+        }, 1000);
+
+        return () => {clearInterval(interval)}
+    });
 </script>
 
 <div class="w-full h-full"><canvas bind:this={chartDomObject}></canvas></div>

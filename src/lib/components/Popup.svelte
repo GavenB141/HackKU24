@@ -10,7 +10,10 @@
     </div>
     <button 
         transition:fly
-        on:click={()=>{open = false}}
-        class="fixed top-0 left-0 h-full w-full bg-white/10 p-0 border-none"
+        on:click={(e)=>{
+            e.stopPropagation();
+            open = false
+        }}
+        class="fixed top-0 left-0 h-full w-full bg-white/10 hover:bg-white/10 active:bg-white/10 p-0 border-none"
     ></button>
 {/if}

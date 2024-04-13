@@ -1,29 +1,23 @@
 <script lang="ts">
-    //import { authInfo, authClient } from "$lib/authStore";
-    import { type UserAuth } from "$lib/types";
+    import { type UserAuth, type UserPortfolio } from "$lib/types";
+    import logo from "$lib/assets/logo.svg";
 
+    export let portfolio: UserPortfolio;
     export let auth: UserAuth;
+
     $: username = auth.info?.user.username;
 </script>
 
-<div class="bg-black h-screen p-8 w-64">
-    <h1 class="w-full text-center font-black">
-        <span class="bit">bit</span><span class="pinch">pinch</span>
-    </h1>
+<div class="h-screen p-8 w-64 rounded-r-3xl mr-2 border border-white/25 text-center" style="background-color: rgb(10, 10, 12);">
+    <img src={logo} alt="bitpinch" />
+    <br>
     {#if username}
-        <p>Logged in as { username }</p>
-        <button on:click={ () => auth.client?.logout(true) }>Log Out</button>
-    {:else}
-        <p>Not Logged In</p>
-        <button on:click={ () => auth.client?.redirectToLoginPage() }>Log In</button>
+        <p class="text-xl font-bold underline">{ username }</p>
+        <div class="grid grid-cols-1 text-md px-4">
+            <div class="border-t border-b border-white/50">
+                <p class="text-left">Liquid Balance:</p> 
+                <p class="text-coinblue-secondary text-right">{portfolio.liquid.toFixed(2)}</p>
+            </div>
+        </div>
     {/if}
 </div>
-
-<style>
-    .bit {
-        color: #11a9BC;
-    }
-    .pinch {
-        color: #84D6D7; 
-    }
-</style>

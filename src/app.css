@@ -7,7 +7,10 @@ body {
     --color2: #33BBC7;
     --color3: #84D6D7;
 
-    background-color: black;
+    font-family: monospace;
+    font-weight: 600;
+
+    background-color: rgb(12, 16, 20);
     color: white;
 }
 
