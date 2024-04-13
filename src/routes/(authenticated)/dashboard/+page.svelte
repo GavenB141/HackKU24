@@ -2,9 +2,13 @@
     import Popup from "$lib/components/Popup.svelte";
     import Sidebar from "./Sidebar.svelte";
     import { fetchEventSource } from '@microsoft/fetch-event-source';
+<<<<<<< Updated upstream
     import type { UserAuth } from "$lib/types";
 
     export let data: { auth: UserAuth };
+=======
+    import LineGraph from "$lib/components/LineGraph.svelte";
+>>>>>>> Stashed changes
 
     let sidebarOpen = false;
 
@@ -80,7 +84,9 @@
                 </div>
 
             </div>
-            <div class="border border-green-200 w-full h-full p-2">Selected coin graph</div>
+            <div class="border border-green-200 w-full h-full p-2">Selected coin graph
+               <LineGraph /> 
+            </div>
         </div>
         <div class="flex flex-row h-full">
             <div class="border border-blue-400 w-full h-full p-2">Create a coin</div>
