@@ -2,13 +2,9 @@
     import Popup from "$lib/components/Popup.svelte";
     import Sidebar from "./Sidebar.svelte";
     import { fetchEventSource } from '@microsoft/fetch-event-source';
-<<<<<<< Updated upstream
     import type { UserAuth } from "$lib/types";
-
     export let data: { auth: UserAuth };
-=======
     import LineGraph from "$lib/components/LineGraph.svelte";
->>>>>>> Stashed changes
 
     let sidebarOpen = false;
 
