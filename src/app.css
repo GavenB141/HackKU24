@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+a {
+    color: blue;
+    text-decoration: underline;
+}
+
+h1 {
+    font-weight: 700;
+    font-size: 32px;
+}
+
+button {
+    border: solid black 1px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+button:hover {
+    border-color: rgba(0,0,0,0.5);
+}
