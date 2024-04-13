@@ -1,12 +1,9 @@
 <script lang="ts">
-    import { authInfo, authClient } from "$lib/authStore";
+    //import { authInfo, authClient } from "$lib/authStore";
+    import { type UserAuth } from "$lib/types";
 
-    let username: String | undefined = undefined;
-    authInfo.subscribe((authInfo) => {
-        if (authInfo) {
-            username = authInfo.user.username;
-        }
-    });
+    export let auth: UserAuth;
+    $: username = auth.info?.user.username;
 </script>
 
 <div class="bg-black h-screen p-8 w-64">
@@ -15,10 +12,10 @@
     </h1>
     {#if username}
         <p>Logged in as { username }</p>
-        <button on:click={ () => $authClient?.logout(true) }>Log Out</button>
+        <button on:click={ () => auth.client?.logout(true) }>Log Out</button>
     {:else}
         <p>Not Logged In</p>
-        <button on:click={ () => $authClient?.redirectToLoginPage() }>Log In</button>
+        <button on:click={ () => auth.client?.redirectToLoginPage() }>Log In</button>
     {/if}
 </div>
 

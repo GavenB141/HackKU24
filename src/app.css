@@ -6,7 +6,7 @@ body {
     --color1: #11a9BC;
     --color2: #33BBC7;
     --color3: #84D6D7;
-    --color4: black;
+
     background-color: black;
     color: white;
 }
@@ -22,10 +22,17 @@ h1 {
 }
 
 button {
-    border: solid black 1px;
+    background-color: var(--color1);
+    border: solid rgba(128, 128, 128, 0.5) 1px;
+    border-radius: 4px;
+    font-weight: 700;
+    padding: 4px;
     padding-left: 6px;
     padding-right: 6px;
 }
 button:hover {
-    border-color: rgba(0,0,0,0.5);
+    background-color: var(--color2);
+}
+button:active {
+    background-color: var(--color3);
 }

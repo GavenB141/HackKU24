@@ -1,27 +1,22 @@
 <script lang="ts">
-    import { authInfo } from "$lib/authStore";
     import Popup from "$lib/components/Popup.svelte";
-    import { derived } from "svelte/store";
     import Sidebar from "./Sidebar.svelte";
     import { fetchEventSource } from '@microsoft/fetch-event-source';
+    import type { UserAuth } from "$lib/types";
+
+    export let data: { auth: UserAuth };
 
     let sidebarOpen = false;
 
     // ---------------------- temporary chat feature ----------------------
     let message = "";
     let message_log = ["Predefined message"];
-
-    let bearer = derived(authInfo, (authInfo) => {
-        let token = authInfo?.accessToken;
-        if (token) {
-            return `Bearer ${token}`;
-        }
-    });
+    const bearer = `Bearer ${data.auth.info.accessToken}`;
 
     function send_message() {
         let data = new FormData();
         data.append("message", message);
-        let token = $bearer;
+        let token = bearer;
         if (token) {
             fetch("/api/chat", {
                 method: "POST",
@@ -33,34 +28,34 @@
         }
 
         message = "";
-    }
-    bearer.subscribe((token) => {
-        if (!token) return;
-        fetchEventSource("/api/chat", {
-            headers: {
-                "Authorization": token
-            },
-            onmessage(event) {
-                message_log.push(event.data);
-                message_log = message_log;
-            },
-        });
+    };
+
+    fetchEventSource("/api/chat", {
+        headers: {
+            "Authorization": bearer
+        },
+        onmessage(event) {
+            message_log.push(event.data);
+            message_log = message_log;
+        },
     });
+
     // ---------------------- end chat feature ----------------------
 
     // todo: detect mobile and improve mobile layout
     let mobile = false;
 </script>
 
+
 <!-- General layout concept -->
 <div class="flex flex-row h-screen">
     {#if !mobile}
-        <Sidebar />
+        <Sidebar auth={data.auth} />
     {/if}
     <div class="flex flex-col w-full">
         {#if mobile}
             <Popup bind:open={sidebarOpen}>
-                <Sidebar />
+                <Sidebar auth={data.auth} />
             </Popup>
             <button on:click={()=>{
                 sidebarOpen = true;

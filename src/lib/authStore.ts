@@ -3,14 +3,12 @@ import { createClient, type IAuthClient, type AuthenticationInfo } from "@propel
 import { derived, readable, type Readable } from "svelte/store";
 import { env } from '$env/dynamic/public';
 
-let client_value: IAuthClient | null = null;
-if (browser) {
-    client_value = createClient({
+let authClient = readable<IAuthClient | null>(null, (set)=>{
+    set(createClient({
         authUrl: env.PUBLIC_AUTH_URL,
         enableBackgroundTokenRefresh: true,
-    }) ?? null;
-}
-let authClient: Readable<IAuthClient | null> = readable(client_value);
+    }) ?? null);
+});
 
 let authInfo: Readable<AuthenticationInfo | null> = derived(authClient, (authClient, set) => {
     authClient?.getAuthenticationInfoOrNull().then((authInfo) => set(authInfo));

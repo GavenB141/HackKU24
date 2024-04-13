@@ -1,18 +1,16 @@
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
+import type { UserAuth } from "$lib/types";
+import { type IAuthClient, type AuthenticationInfo } from "@propelauth/javascript";
+
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals {
+            auth: UserAuth;
+        }
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
 	}
-
-    interface Point {
-        x: number;
-        y: number;
-    }
 }
 
 export {};
