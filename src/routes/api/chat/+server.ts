@@ -27,9 +27,12 @@ async function verifyAuth(headers: Headers) {
     if (!auth_header) {
         return false;
     }
-    // TODO: Not sure what happens when this fails- assuming an exception, is it bad? Test with garbage Authentication header.
-    let user = await validateAccessTokenAndGetUser(auth_header);
-    return user;
+    try {
+        let user = await validateAccessTokenAndGetUser(auth_header);
+        return user;
+    } catch {
+        return false;
+    }
 }
 
 
