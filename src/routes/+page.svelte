@@ -12,3 +12,7 @@
 }}>
     {count}% completion 
 </button>
+
+<h2>To Do</h2>
+<p>This should be a nice introductory page to our application and why it's cool.</p>
+<a href="/dashboard" class="rounded py-2 bg-blue-800 text-white no-underline mt-2 block text-center">Get Started</a>
