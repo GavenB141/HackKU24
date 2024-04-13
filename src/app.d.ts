@@ -8,6 +8,11 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+
+    interface Point {
+        x: number;
+        y: number;
+    }
 }
 
 export {};

@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    --color1: #11a9BC;
+    --color2: #33BBC7;
+    --color3: #84D6D7;
+    --color4: black;
+    background-color: black;
+    color: white;
+}
+
 a {
     color: blue;
     text-decoration: underline;
