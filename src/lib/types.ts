@@ -1,4 +1,5 @@
 import { type AuthenticationInfo, type IAuthClient } from "@propelauth/javascript";
+import { Decimal128 } from 'decimal128';
 
 export interface UserAuth {
     client: IAuthClient;
@@ -7,4 +8,17 @@ export interface UserAuth {
 
 export interface UserPortfolio {
     liquid: number;
+}
+
+export interface UserBalance {
+    fiat: Decimal128,
+}
+
+
+export interface CoinValues {
+    [Key: string]: CoinValue
+}
+
+export interface CoinValue  {
+    marketValue: Decimal128,
 }

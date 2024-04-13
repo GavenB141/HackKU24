@@ -1,7 +1,6 @@
 // Temporary chat feature
 
-import { env } from '$env/dynamic/private';
-import { initBaseAuth } from '@propelauth/node';
+import { verifyAuth } from '$lib/user.js';
 
 
 let controllers: Set<ReadableStreamController<any>> = new Set();
@@ -13,28 +12,6 @@ function sendMessage(message: String) {
         controller.enqueue(encoded);
     })
 }
-
-
-const {
-    validateAccessTokenAndGetUser,
-} = initBaseAuth({
-    authUrl: env.PRIVATE_AUTH_URL,
-    apiKey: env.PRIVATE_AUTH_API_KEY,
-});
-
-async function verifyAuth(headers: Headers) {
-    let auth_header = headers.get("Authorization");
-    if (!auth_header) {
-        return false;
-    }
-    try {
-        let user = await validateAccessTokenAndGetUser(auth_header);
-        return user;
-    } catch {
-        return false;
-    }
-}
-
 
 export async function GET({request}) {
     if (!await verifyAuth(request.headers)) {
