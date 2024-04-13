@@ -13,7 +13,7 @@
             on:click={()=>{
                 sidebarOpen = true;
             }}
-        >{portfolio.liquid.toFixed(2)}</button>
+        >{portfolio.liquid.round(2).toString()}</button>
     {/if}
     <h1 class="w-full text-center font-black font-mono">
         <span class="bit">bit</span><span class="pinch">pinch</span>

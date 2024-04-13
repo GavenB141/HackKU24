@@ -7,13 +7,8 @@ export interface UserAuth {
 }
 
 export interface UserPortfolio {
-    liquid: number;
+    liquid: Decimal128;
 }
-
-export interface UserBalance {
-    fiat: Decimal128,
-}
-
 
 export interface CoinValues {
     [Key: string]: CoinValue

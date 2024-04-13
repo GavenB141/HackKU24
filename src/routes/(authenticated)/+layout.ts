@@ -1,6 +1,7 @@
 import { type UserAuth, type UserPortfolio } from "$lib/types";
 import { createClient, type AuthenticationInfo } from "@propelauth/javascript";
 import { env } from '$env/dynamic/public';
+import { Decimal128 } from "decimal128";
 
 export const ssr = false;
 
@@ -25,7 +26,7 @@ export const load = (async function(): Promise<{auth:UserAuth, portfolio:UserPor
         },
         portfolio: {
             //temp harcoding
-            liquid: 1200
+            liquid: new Decimal128(123456789).divide(new Decimal128(10e4))
         }
     }
 });

@@ -16,7 +16,7 @@
         <div class="grid grid-cols-1 text-md px-4">
             <div class="border-t border-b border-white/50">
                 <p class="text-left">Liquid Balance:</p> 
-                <p class="text-coinblue-secondary text-right">{portfolio.liquid.toFixed(2)}</p>
+                <p class="text-coinblue-secondary text-right">{portfolio.liquid.round(2).toString()}</p>
             </div>
         </div>
     {/if}

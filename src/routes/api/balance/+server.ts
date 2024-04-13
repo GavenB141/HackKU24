@@ -2,7 +2,7 @@ import { User } from '$lib/database.js';
 import { verifyAuth } from '$lib/user.js';
 import { json } from '@sveltejs/kit';
 import { UUID } from 'mongodb';
-import { type UserBalance } from '$lib/types.js';
+import { type UserPortfolio } from '$lib/types.js';
 
 export async function GET({ request }) {
     let headers = request.headers;
@@ -19,6 +19,6 @@ export async function GET({ request }) {
             status: 500
         });
     }
-    let res: UserBalance = {fiat: document.balance};
+    let res: UserPortfolio = {liquid: document.balance};
     return json(res);
 }
