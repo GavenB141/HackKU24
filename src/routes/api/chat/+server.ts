@@ -1,5 +1,9 @@
 // Temporary chat feature
 
+import { env } from '$env/dynamic/private';
+import { initBaseAuth } from '@propelauth/node';
+
+
 let controllers: Set<ReadableStreamController<any>> = new Set();
 let encoder = new TextEncoder();
 function sendMessage(message: String) {
@@ -10,7 +14,32 @@ function sendMessage(message: String) {
     })
 }
 
-export async function GET() {
+
+const {
+    validateAccessTokenAndGetUser,
+} = initBaseAuth({
+    authUrl: env.PRIVATE_AUTH_URL,
+    apiKey: env.PRIVATE_AUTH_API_KEY,
+});
+
+async function verifyAuth(headers: Headers) {
+    let auth_header = headers.get("Authorization");
+    if (!auth_header) {
+        return false;
+    }
+    // TODO: Not sure what happens when this fails- assuming an exception, is it bad? Test with garbage Authentication header.
+    let user = await validateAccessTokenAndGetUser(auth_header);
+    return user;
+}
+
+
+export async function GET({request}) {
+    if (!await verifyAuth(request.headers)) {
+        return new Response(null, {
+            status: 401
+        })
+    }
+
     let this_controller: any = undefined;
     const stream = new ReadableStream(
         {
@@ -34,6 +63,12 @@ export async function GET() {
 }
 
 export async function POST(event) {
+    if (!await verifyAuth(event.request.headers)) {
+        return new Response(null, {
+            status: 401
+        })
+    }
+
     let data = await event.request.formData();
     let message = data.get("message");
 

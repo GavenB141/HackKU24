@@ -23,7 +23,9 @@
 		"vite": "^5.0.3"
 	},
 	"dependencies": {
-		"@propelauth/javascript": "^2.0.14"
+		"@microsoft/fetch-event-source": "^2.0.1",
+		"@propelauth/javascript": "^2.0.14",
+		"@propelauth/node": "^2.1.12"
 	},
 	"type": "module"
 }

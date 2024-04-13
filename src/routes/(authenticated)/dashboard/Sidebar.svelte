@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { user, authClient } from "$lib/authStore";
+    import { authInfo, authClient } from "$lib/authStore";
 
     let username: String | undefined = undefined;
-    user.subscribe((user) => {
-        if (user) {
-            username = user.username;
+    authInfo.subscribe((authInfo) => {
+        if (authInfo) {
+            username = authInfo.user.username;
         }
     });
 </script>

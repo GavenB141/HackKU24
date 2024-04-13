@@ -1,32 +1,51 @@
-<script>
-    import { browser } from "$app/environment";
+<script lang="ts">
+    import { authInfo } from "$lib/authStore";
     import Popup from "$lib/components/Popup.svelte";
+    import { derived } from "svelte/store";
     import Sidebar from "./Sidebar.svelte";
+    import { fetchEventSource } from '@microsoft/fetch-event-source';
 
     let sidebarOpen = false;
 
     // ---------------------- temporary chat feature ----------------------
     let message = "";
     let message_log = ["Predefined message"];
-    function send_message() {
-        console.log(message);
 
+    let bearer = derived(authInfo, (authInfo) => {
+        let token = authInfo?.accessToken;
+        if (token) {
+            return `Bearer ${token}`;
+        }
+    });
+
+    function send_message() {
         let data = new FormData();
         data.append("message", message);
-        fetch("/api/chat", {
-            method: "POST",
-            body: data
-        });
+        let token = $bearer;
+        if (token) {
+            fetch("/api/chat", {
+                method: "POST",
+                body: data,
+                headers: {
+                    Authorization: token
+                }
+            });
+        }
 
         message = "";
     }
-    if (browser) {
-        let source = new EventSource("/api/chat");
-        source.onmessage = (event) => {
-            message_log.push(event.data);
-            message_log = message_log;
-        };
-    }
+    bearer.subscribe((token) => {
+        if (!token) return;
+        fetchEventSource("/api/chat", {
+            headers: {
+                "Authorization": token
+            },
+            onmessage(event) {
+                message_log.push(event.data);
+                message_log = message_log;
+            },
+        });
+    });
     // ---------------------- end chat feature ----------------------
 
     // todo: detect mobile and improve mobile layout

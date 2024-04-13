@@ -1,6 +1,6 @@
 import { browser } from "$app/environment";
-import { createClient, type IAuthClient, type User } from "@propelauth/javascript";
-import { derived, readable, readonly, writable, type Readable, type Writable } from "svelte/store";
+import { createClient, type IAuthClient, type AuthenticationInfo } from "@propelauth/javascript";
+import { derived, readable, type Readable } from "svelte/store";
 import { env } from '$env/dynamic/public';
 
 let client_value: IAuthClient | null = null;
@@ -12,11 +12,11 @@ if (browser) {
 }
 let authClient: Readable<IAuthClient | null> = readable(client_value);
 
-let user: Readable<User | null> = derived(authClient, (authClient, set) => {
-    authClient?.getAuthenticationInfoOrNull().then((authInfo) => set(authInfo?.user ?? null));
+let authInfo: Readable<AuthenticationInfo | null> = derived(authClient, (authClient, set) => {
+    authClient?.getAuthenticationInfoOrNull().then((authInfo) => set(authInfo));
 });
 
 export {
     authClient,
-    user
+    authInfo
 };
