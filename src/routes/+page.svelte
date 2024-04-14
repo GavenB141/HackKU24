@@ -69,7 +69,7 @@
     <span class="bit">bit</span><span class="pinch">pinch</span>
 </h1>
 
-<p class="tag1" style="width: 800px;">The Best Massivley Multiplayer Real Time Strategic Speculative Asset Market Simulation Game</p>
+<p class="tag1" style="width: 800px;">The Best Massively Multiplayer Real Time Strategic Speculative Asset Market Simulation Game</p>
 <img src='src/lib/assets/logo.svg' width="25%" height="25%" class="logo">
 <img src='src/lib/assets/duc.svg' width="3%" height="3%" class="duc">
    
