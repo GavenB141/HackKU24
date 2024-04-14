@@ -42,7 +42,7 @@
                 <CoinGraph />
             </div>
         </div>
-        <Controls />
+        <Controls {data} />
         <marquee class="bg-black" hidden>Secret marquee</marquee>
     </div>
 </div>
