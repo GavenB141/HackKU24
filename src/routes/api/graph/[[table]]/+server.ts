@@ -1,7 +1,7 @@
 import { MessageSink } from '$lib/messageSink.js';
 import { verifyAuth } from '$lib/user.js'
 
-const DATA_POINTS_TO_SEND = 55;
+const DATA_POINTS_TO_SEND = 30;
 const history = new Array(DATA_POINTS_TO_SEND);
 history.fill(0);
 

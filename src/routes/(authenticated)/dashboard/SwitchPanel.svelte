@@ -18,7 +18,7 @@
     {:else}
         <p class="pt-10">{selected}</p>
         {#if selected !== "none"}
-            <p>To be implemented</p>
+            <p>Not currently implemented</p>
         {/if}
     {/if}
 </div>

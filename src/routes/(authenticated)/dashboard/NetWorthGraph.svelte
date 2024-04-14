@@ -4,7 +4,7 @@
     import { MessageSource } from "$lib/messageSource";
     import { bearerToken } from "$lib/userData";
 
-    let graph = new GraphData([10], 50);
+    let graph = new GraphData([10], 25);
     $: if ($bearerToken) {
         new MessageSource("/api/graph", $bearerToken, (value) => {
             graph.append(value);
