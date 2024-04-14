@@ -94,6 +94,7 @@ async function distributeMined() {
     for (let user of users) {
         let session = await mongoose.startSession();
         session.withTransaction(async (session) => {
+            if (!user.portfolio) return; // need a portfolio to mine with
             let allCoins = Array.from(user.portfolio.keys());
             if (allCoins.length == 0) return; // no empty lists
             let minedCoin = allCoins[Math.floor(Math.random() * allCoins.length)];
