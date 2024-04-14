@@ -64,7 +64,7 @@ export const POST = (async function({ request, params }) {
         }
         dbUser.portfolio.set(ticker, new Decimal128(amount.toString())); // safe to set; this is a new currency
 
-        await new Coin({_id: ticker}).save();
+        await new Coin({_id: ticker, last_sold_for: investRate}).save();
         await dbUser.save();
         await session.commitTransaction();
     });

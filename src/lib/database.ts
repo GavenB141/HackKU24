@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
     _id: { type: Schema.Types.UUID, required: true },
     balance: { type: Schema.Types.Decimal128, required: true },
     portfolio: {
-        type: Map,
+        type: Schema.Types.Map,
         of: Schema.Types.Decimal128,
     }
 });
@@ -13,6 +13,7 @@ export const User: mongoose.Model<IUser> = mongoose.model("users", userSchema);
 
 const coinSchema = new mongoose.Schema({
     _id: { type: String, required: true },
+    last_sold_for: { type: Schema.Types.Decimal128 },
 });
 export type ICoin = InferSchemaType<typeof coinSchema>;
 export const Coin: mongoose.Model<ICoin> = mongoose.model("coins", coinSchema);
