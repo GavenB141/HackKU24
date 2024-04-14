@@ -1,17 +1,9 @@
 // Temporary chat feature
 
+import { MessageSink } from '$lib/messageSink.js';
 import { verifyAuth } from '$lib/user.js';
 
-
-let controllers: Set<ReadableStreamController<any>> = new Set();
-let encoder = new TextEncoder();
-function sendMessage(message: String) {
-    // TODO: Escape message (form encoding) so that there's no funny injections
-    let encoded = encoder.encode(`data: ${message}\n\n`);
-    controllers.forEach((controller) => {
-        controller.enqueue(encoded);
-    })
-}
+let messageStream = new MessageSink();
 
 export async function GET({request}) {
     if (!await verifyAuth(request.headers)) {
@@ -19,27 +11,7 @@ export async function GET({request}) {
             status: 401
         })
     }
-
-    let this_controller: any = undefined;
-    const stream = new ReadableStream(
-        {
-            start(controller) {
-                this_controller = controller;
-                controllers.add(controller);
-            },
-            cancel() {
-                if (this_controller) {
-                    controllers.delete(this_controller);
-                }
-            }
-        }
-    );
-    return new Response(stream, {
-        headers: {
-            "Content-Type": "text/event-stream",
-            "Cache-Control": "no-cache"
-        }
-    })
+    return messageStream.newStream();
 }
 
 export async function POST(event) {
@@ -53,9 +25,7 @@ export async function POST(event) {
     let message = data.get("message");
 
     // HACK: This makes the type system happy at least
-    if (typeof(message) === "string") { 
-        sendMessage(message);
-    }
+    messageStream.sendMessage(message);
 
     return new Response();
 }

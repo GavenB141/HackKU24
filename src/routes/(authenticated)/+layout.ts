@@ -1,12 +1,11 @@
-import { type UserAuth, type UserPortfolio } from "$lib/types";
+import { type UserAuth } from "$lib/types";
 import { createClient, type AuthenticationInfo } from "@propelauth/javascript";
 import { env } from '$env/dynamic/public';
-import { Decimal128 } from "decimal128";
 
 export const ssr = false;
 
 //@ts-ignore
-export const load = (async function(): Promise<{auth:UserAuth, portfolio:UserPortfolio}> {
+export const load = (async function(): Promise<{auth:UserAuth}> {
     let authClient = createClient({
         authUrl: env.PUBLIC_AUTH_URL,
         enableBackgroundTokenRefresh: true,
@@ -23,10 +22,6 @@ export const load = (async function(): Promise<{auth:UserAuth, portfolio:UserPor
         auth: {
             client: authClient,
             info: <AuthenticationInfo>authInfo
-        },
-        portfolio: {
-            //temp harcoding
-            liquid: new Decimal128(123456789).divide(new Decimal128(10e4))
         }
     }
 });

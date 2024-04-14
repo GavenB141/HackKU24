@@ -1,10 +1,13 @@
 <script lang="ts">
     import Popup from "$lib/components/Popup.svelte";
     import Sidebar from "./Sidebar.svelte";
+    import LineGraph from "$lib/components/LineGraph.svelte";
     import type { UserAuth, UserPortfolio } from "$lib/types";
     import Topbar from "./Topbar.svelte";
     import CoinGraph from "./CoinGraph.svelte";
     import NetWorthGraph from "./NetWorthGraph.svelte";
+    import { authorizedFetch } from "$lib/userData";
+    import { MessageSource } from "$lib/messageSource";
 
     export let data: {
         auth: UserAuth,

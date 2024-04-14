@@ -1,19 +1,21 @@
 <script lang="ts">
-    import type { UserAuth, UserPortfolio } from "$lib/types";
+    import type { UserAuth } from "$lib/types";
+    import { portfolio } from "$lib/userData";
 
     export let auth: UserAuth;
-    export let portfolio: UserPortfolio;
     export let mobile: boolean;
     export let sidebarOpen: boolean;
+
+    $: liquidBalance = $portfolio.liquid;
 </script>
 
 <div class="w-full flex flex-row items-center justify-between p-2">
     {#if mobile}
-        <button class="text-coinblue-primary text-base bg-white/5 -ml-2 p-2 pr-4 rounded-r-full border-none rounded-none p-0"
+        <button class="text-coinblue-primary text-base bg-white/5 -ml-2 p-2 pr-4 rounded-r-full border-none rounded-none"
             on:click={()=>{
                 sidebarOpen = true;
             }}
-        >{portfolio.liquid.round(2).toString()}</button>
+        >{liquidBalance.round(2).toString()}</button>
     {/if}
     <h1 class="w-full text-center font-black font-mono">
         <span class="bit">bit</span><span class="pinch">pinch</span>
