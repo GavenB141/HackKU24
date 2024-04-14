@@ -8,6 +8,12 @@ export interface UserAuth {
 
 export interface UserPortfolio {
     liquid: Decimal128;
+    coins: {
+        [name: string]: {
+            "count": Decimal128,
+            "marketValue": Decimal128,
+        }
+    }
 }
 
 export interface CoinValues {

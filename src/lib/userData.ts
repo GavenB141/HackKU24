@@ -25,9 +25,12 @@ export const portfolio: Readable<UserPortfolio> = derived(bearerToken, (bearer, 
     if (bearer) {
         new MessageSource("/api/balance", bearer, message => {
             let liquid = message["liquid"];
+            let coins = {};
+            // TODO: Assign coins
             if (liquid) set({
-                liquid: new Decimal128(liquid)
+                liquid: new Decimal128(liquid),
+                coins: coins,
             });
         });
     }
-}, { liquid: new Decimal128(0) });
+}, <UserPortfolio>{ liquid: new Decimal128(0), coins: {} });
