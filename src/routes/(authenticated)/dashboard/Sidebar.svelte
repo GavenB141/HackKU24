@@ -19,6 +19,12 @@
                 <p class="text-left">Liquid Balance:</p> 
                 <p class="text-coinblue-secondary text-right">{liquidBalance.round(2).toString()}</p>
             </div>
+            {#each Object.keys($portfolio.coins) as ticker}
+                <div class="border-b border-white/50">
+                    <p class="text-left">{ticker}:</p>
+                    <p class="text-coinblue-secondary text-right">{$portfolio.coins[ticker].count.toString()}</p>
+                </div>
+            {/each}
         </div>
     {/if}
 </div>
