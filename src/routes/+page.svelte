@@ -2,7 +2,7 @@
     <div class="flex flex-col justify-space-around h-full">
         <div class="flex flex-col md:flex-row justify-evenly">
             <img
-                src="src/lib/assets/logo.svg"
+                src={logo_img}
                 alt="Bitpinch Logo"
                 class="w-full h-full max-w-prose" 
             />
@@ -53,3 +53,8 @@
         margin: 0 0 1em 4em;
     }
 </style>
+
+<script>
+    import logo_img from "$lib/assets/logo.svg";
+    import duc_img from "$lib/assets/duc.svg";
+</script>
