@@ -1,5 +1,5 @@
+import type { LinearScale, Scale } from "chart.js";
 import { tweened, type Tweened } from "svelte/motion";
-import { get } from "svelte/store";
 
 export default class GraphData {
     label: string = "Value";
@@ -85,12 +85,12 @@ interface FillData {
 
 function getGradient(ctx: CanvasRenderingContext2D, chartArea: any, data: any, scales: any) {
     const { bottom } = chartArea;
-    const { y } = scales;
+    // const { y } = scales;
     const gradientBorder = ctx.createLinearGradient(0, 0, 0, bottom);
-    const shift = Math.min(y.getPixelForValue(data.datasets[0].data[0]) / bottom, 1);
+    // const shift = Math.min(y.getPixelForValue(data.datasets[0].data[0]) / bottom, 1);
     gradientBorder.addColorStop(0, "rgba(75, 192, 192, 1)");
-    gradientBorder.addColorStop(shift, "rgba(75, 192, 192, 1)");
-    gradientBorder.addColorStop(shift, "rgba(255, 26, 104, 1)");
+    gradientBorder.addColorStop(0.33, "rgba(75, 192, 192, 1)");
+    gradientBorder.addColorStop(0.66, "rgba(255, 26, 104, 1)");
     gradientBorder.addColorStop(1, "rgba(255, 26, 104, 1)");
     return gradientBorder;
 }
