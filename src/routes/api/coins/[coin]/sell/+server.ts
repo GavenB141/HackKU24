@@ -1,7 +1,8 @@
-import { SellOrder } from "$lib/database.js";
+import { SellOrder, User } from "$lib/database.js";
 import { verifyAuth } from "$lib/user";
-import type { RequestHandler } from "@sveltejs/kit";
+import { json, type RequestHandler } from "@sveltejs/kit";
 import { UUID } from "mongodb";
+import { startSession } from "mongoose";
 
 export const POST = (async function POST({request, params}) {
     let headers = request.headers;
@@ -15,14 +16,29 @@ export const POST = (async function POST({request, params}) {
     let ticker = params.coin;
     let {quantity, payment} = await request.json();
 
-    // TODO modify portfolio
-    
-    let order = new SellOrder({
-        buyer: new UUID(user.userId),
-        coin: "", // TODO
-        quantity: 0, // TODO
-        unit_price: 0, // TODO
+    let session = await startSession();
+
+    let dbUser = await User.findById(new UUID(user.userId));
+    if (!dbUser) {
+        return json({error: "you are not one of us"}, {status: 401});
+    }
+    let error = undefined;
+    session.withTransaction(async () => {
+        let inventory = dbUser?.portfolio.get(ticker);
+        if (!inventory || inventory < quantity) {
+            error = "Not enough Coins";
+        }
+        let order = new SellOrder({
+            seller: new UUID(user.userId),
+            coin: ticker,
+            quantity: quantity,
+            unit_price: payment,
+        });
+        order.save();
     });
-    order.save();
-    return new Response("");
+    if (error) {
+        return json({error: error});
+    }
+   
+    return json({success: "Created Sell Order!"});
 }) satisfies RequestHandler;

@@ -1,4 +1,4 @@
-import { BuyOrder, SellOrder, User, type IBuyOrder, type ISellOrder } from "./database";
+import { BuyOrder, Coin, SellOrder, User, type IBuyOrder, type ISellOrder } from "./database";
 import mongoose from "mongoose";
 
 function onLoop() {
@@ -58,6 +58,8 @@ async function attemptBuySaleOrder(buyOrder: IBuyOrder, sellOrder: ISellOrder) {
     let refund = refundPerUnit * quantity;
     buyer.balance = Number(buyer.balance) + refund;
 
+    Coin.findByIdAndUpdate({_id: sellOrder.coin, last_sold_for: unit_price});
+
     if (sellOrder.quantity == 0) {
         console.log("delete sellorder");
         await SellOrder.findByIdAndDelete(sellOrder._id);
@@ -99,7 +101,7 @@ async function distributeMined() {
             if (allCoins.length == 0) return; // no empty lists
             let minedCoin = allCoins[Math.floor(Math.random() * allCoins.length)];
             let newCount = Number(user.portfolio.get(minedCoin)) + 1;
-            console.log("mined", user, minedCoin, user.portfolio, newCount);
+            console.log("mined", user._id, minedCoin);
             user.portfolio.set(minedCoin, newCount);
             await user.save();
             await session.commitTransaction();
