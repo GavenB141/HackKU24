@@ -2,9 +2,9 @@
     import { slide } from "svelte/transition";
 
     
-    let openCategory = ["none", "none"];
+    let openCategory = ["coins", "coins"];
     let index = 0;
-    export let selected = ["none", "none"];
+    export let selected = ["purchase-coins", "sell-coins"];
 </script>
 
 <div class="text-3xl font-bold text-left p-2 w-full bg-black/25 rounded-t-lg flex flex-row justify-between">
