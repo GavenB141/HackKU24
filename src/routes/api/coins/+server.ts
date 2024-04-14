@@ -17,8 +17,7 @@ export async function GET({ request }) {
     let coins = (await Coin.find({})).values();
     for (let coin of coins) {
         res[coin._id] = {
-            // TODO: Calculate this based on recent trends
-            marketValue: new Decimal128(0),
+            marketValue: coin.last_sold_for ??  new Decimal128(1),
         };
     }
     return json(res);
