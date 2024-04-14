@@ -4,8 +4,9 @@
             <img
                 src="src/lib/assets/logo.svg"
                 alt="Bitpinch Logo"
-                class="w-full h-full max-w-prose"
+                class="w-full h-full max-w-prose" 
             />
+            
             <div class="flex flex-col max-w-prose justify-center">
                 <h1 class="text-8xl font-black font-mono mt-1 mb-4">
                     <span class="bit">bit</span><span class="pinch">pinch</span>
@@ -16,12 +17,13 @@
                 </p>
             </div>
         </div>
-        <div class="flex flex-col h-full w-full justify-center">
+
+        <div class="flex flex-row h-full w-full" style="padding-top: 200px;">
             <a
                 style= "color:black"
                 data-sveltekit-reload
                 href="/dashboard"
-                class="button w-1/5 rounded py-2 bg-blue-500 font-weight 900 no-underline mt-4 block text-center text-4xl m-auto min-w-fit"
+                class="w-1/5 rounded py-2 bg-blue-500 font-weight 900 no-underline block text-center text-4xl m-auto min-w-fit"
                 >Get Started</a
             >
         </div>
@@ -40,7 +42,7 @@
         color: #84d6d7;
     }
     .hackku-bottom-right {
-        position: absolute;
+        position: fixed;
         right: 1em;
         bottom: 0;
         width: fit-content;
