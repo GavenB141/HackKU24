@@ -43,3 +43,18 @@ export const portfolio: Readable<UserPortfolio> = derived(bearerToken, (bearer, 
         });
     }
 }, <UserPortfolio>{ liquid: new Decimal128(0), coins: {} });
+
+export const netWorth: Readable<number> = derived(portfolio, (portfolio) => {
+    if (portfolio.coins) {
+        let total = Number(portfolio.liquid.toString());
+        for (let name of Object.keys(portfolio.coins)) {
+            let coin = portfolio.coins[name];
+            let count = Number(coin['count'].toString());
+            let marketValue = Number(coin['marketValue'].toString());
+            total += count * marketValue;
+        }
+        return total;
+    } else {
+        return Number(portfolio.liquid.toString());
+    }
+}, 0);
