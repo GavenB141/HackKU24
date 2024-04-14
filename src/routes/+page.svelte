@@ -18,6 +18,7 @@
         </div>
         <div class="flex h-full w-full justify-center content-center">
             <a
+                style= "color:black"
                 data-sveltekit-reload
                 href="/dashboard"
                 class="button w-1/5 rounded py-2 bg-blue-500 font-weight 900 no-underline mt-4 block text-center text-4xl m-auto min-w-fit"
@@ -40,7 +41,7 @@
     }
     .hackku-bottom-right {
         position: absolute;
-        right: 0;
+        right: 1em;
         bottom: 0;
         width: fit-content;
         align-content: center;
