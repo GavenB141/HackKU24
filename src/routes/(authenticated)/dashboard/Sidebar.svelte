@@ -8,7 +8,7 @@
     $: username = auth.info?.user.username;
 </script>
 
-<div class="h-screen p-8 w-64 rounded-r-3xl mr-2 border border-white/25 text-center" style="background-color: rgb(10, 10, 12);">
+<div class="h-screen p-8 w-64 rounded-r-3xl mr-2 border border-white/25 text-center bg-coingrey-darker">
     <img src={logo} alt="bitpinch" />
     <br>
     {#if username}

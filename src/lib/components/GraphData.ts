@@ -7,7 +7,7 @@ export default class GraphData {
     fill: FillData = createFillData();
     readonly maxSize: number;
 
-    tension:number = 0.4;
+    tension:number = 0.2;
     pointRadius:number = 0;
     pointHitRadius:number = 10;
     hoverPointRadius: number = 0;
@@ -21,20 +21,11 @@ export default class GraphData {
         return getGradient(ctx, chartArea, data, scales);
     }
 
-    private tweened_data: Tweened<any>[] = [];
+    last: Tweened<number> = tweened(0);
 
     constructor(data: number[], maxSize?: number) {
         this.data = data;
         this.maxSize = maxSize ?? 50;
-
-        for(let i = 0; i < this.maxSize; i++) {
-            this.tweened_data.push(data?.[i] ? 
-                tweened(data[i], {
-                    duration: 500
-                }) : tweened(undefined, {
-                    duration: 500
-                }));
-        }
     } 
 
     get length() {
@@ -45,27 +36,15 @@ export default class GraphData {
         return this.data[this.data.length-1];
     }
 
-    get data_tweened() {
-        let data:number[] = [];
-        this.tweened_data.forEach((val)=>{
-            data.push(get(val));
-        })
-        return data
-    }
-
     append(value: number) {
         if(this.length >= this.maxSize) {
             this.data.shift();
             this.fill.target.value = this.data[0];
         }
+        let current = this.data.length - 1;
+        this.last = tweened(this.data[current], {duration: 900});
+        this.last.set(value);
         this.data.push(value);
-        this.updateTweened();
-    }
-
-    private updateTweened() {
-        for(let i = 0; i < this.length; i++) {
-            this.tweened_data[i].set(this.data[i]);
-        }
     }
 }
 
@@ -108,7 +87,7 @@ function getGradient(ctx: CanvasRenderingContext2D, chartArea: any, data: any, s
     const { bottom } = chartArea;
     const { y } = scales;
     const gradientBorder = ctx.createLinearGradient(0, 0, 0, bottom);
-    const shift = y.getPixelForValue(data.datasets[0].data[0]) / bottom;
+    const shift = Math.min(y.getPixelForValue(data.datasets[0].data[0]) / bottom, 1);
     gradientBorder.addColorStop(0, "rgba(75, 192, 192, 1)");
     gradientBorder.addColorStop(shift, "rgba(75, 192, 192, 1)");
     gradientBorder.addColorStop(shift, "rgba(255, 26, 104, 1)");

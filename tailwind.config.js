@@ -10,6 +10,11 @@ export default {
             secondary: "#33BBC7",
             tertiary: "#84D6D7"
         },
+        "coingrey": {
+            primary: "rgb(12, 16, 20)",
+            darker: "rgb(10, 10, 12)",
+            lighter: "rgb(28, 32, 36)"
+        },
         ...colors
     },
     extend: {},

@@ -2,13 +2,13 @@
     import Chart from "chart.js/auto";
     import GraphData from "$lib/components/GraphData";
     import { onMount } from "svelte";
+    import { get } from "svelte/store";
 
-    export let history: number = 50;
-    export let graphData = new GraphData(Array(history).fill(10), history);
+    export let graphData: GraphData;
     // export let label: string = "Value";
 
     let data = {
-        labels: Array(history).fill("|"),
+        labels: Array(graphData.maxSize).fill("|"),
         datasets: [
             {...graphData}
         ],
@@ -23,6 +23,12 @@
                     beginAtZero: false,
                 },
             },
+            plugins: {
+                legend: {
+                    onClick: null,
+                    display: false
+                }
+            } 
         },
     };
    
@@ -34,13 +40,13 @@
         chartDomObject.innerText = Chart.version;
 
         let interval1 = setInterval(()=>{
-            graphData.append(graphData.latest + Math.random() * 10 - 4.8);
             data.datasets[0] = {...graphData};
-        }, 500);
+        }, 1000);
 
         let interval2 = setInterval(()=>{
-            data.datasets[0].data = graphData.data_tweened
-            chart.update("none");
+            let last = graphData.length - 1;
+            data.datasets[0].data[last] = get(graphData.last);
+            chart.update("resize");
         }, 50);
 
         return () => {

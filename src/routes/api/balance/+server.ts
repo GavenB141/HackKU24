@@ -1,10 +1,10 @@
 import { User } from '$lib/database.js';
 import { verifyAuth } from '$lib/user.js';
-import { json } from '@sveltejs/kit';
+import { json, type RequestHandler } from '@sveltejs/kit';
 import { UUID } from 'mongodb';
 import { type UserPortfolio } from '$lib/types.js';
 
-export async function GET({ request }) {
+export const GET = (async function({ request }) {
     let headers = request.headers;
     let user = await verifyAuth(headers);
     if (!user) {
@@ -21,4 +21,4 @@ export async function GET({ request }) {
     }
     let res: UserPortfolio = {liquid: document.balance};
     return json(res);
-}
+}) satisfies RequestHandler;
