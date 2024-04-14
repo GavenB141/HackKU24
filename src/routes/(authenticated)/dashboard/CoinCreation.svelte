@@ -5,7 +5,10 @@
     let amount=0;
     let investment=0;
 
-    let result = null;
+    let result: {
+        success?: string,
+        error?: string
+    } | null = null;
 
     async function attemptCreate() {
         result = await (await authorizedFetch("/api/coins/"+ticker, <string>$bearerToken, {
@@ -17,8 +20,6 @@
         })).json();
     }
 </script>
-
-{JSON.stringify(result)}
 
 <div class="h-full">
     <h2 class="text-xl font-bold text-center p-2 bg-black/25 rounded-t-lg mb-4 border-b border-white/50">
@@ -37,7 +38,8 @@
         <label class="col-span-3" for="investment">Initial liquid investment:</label>
         <input name="investment" id="investment" bind:value={investment} />
     </div>
-    <div class="w-full mt-10 text-rose-500 text-center"></div>
+    <div class="w-full mt-5 text-rose-500 text-center">{result?.error ?? ""}</div>
+    <div class="w-full mb-5 text-coinblue-primary text-center">{result?.success ?? ""}</div>
     <div class="grid grid-cols-4">
         <div class="col-span-3"></div>
         <button class="mt-auto" on:click={attemptCreate}>Submit</button>
