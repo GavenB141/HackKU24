@@ -1,12 +1,12 @@
 <main class="h-screen w-screen" style="padding: 20vh;">
-    <div class="flex flex-col justify-end h-full">
+    <div class="flex flex-col justify-space-around h-full">
         <div class="flex flex-col md:flex-row justify-evenly">
             <img
                 src="src/lib/assets/logo.svg"
                 alt="Bitpinch Logo"
                 class="w-full h-full max-w-prose"
             />
-            <div class="flex flex-col max-w-prose">
+            <div class="flex flex-col max-w-prose justify-center">
                 <h1 class="text-8xl font-black font-mono mt-1 mb-4">
                     <span class="bit">bit</span><span class="pinch">pinch</span>
                 </h1>
@@ -16,7 +16,7 @@
                 </p>
             </div>
         </div>
-        <div class="flex h-full w-full justify-center content-center">
+        <div class="flex flex-col h-full w-full justify-center">
             <a
                 style= "color:black"
                 data-sveltekit-reload
@@ -28,7 +28,7 @@
     </div>
 </main>
 <div class="flex hackku-bottom-right">
-    <img src="src/lib/assets/duc.svg" style="height: 150%" />
+    <img src="src/lib/assets/duc.svg" alt="" style="height: 150%" />
     <span>Made for HACKKU</span>
 </div>
 
