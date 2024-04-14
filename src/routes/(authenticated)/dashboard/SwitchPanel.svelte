@@ -7,5 +7,8 @@
 {#if selected === "mint-coin"}
     <CoinCreation />
 {:else}
-    {selected}
+    <p>{selected}</p>
+    {#if selected !== "none"}
+        <p>To be implemented</p>
+    {/if}
 {/if}
