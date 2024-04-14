@@ -37,4 +37,4 @@ setInterval(() => {
         sink.sendMessage(value);
     });
     idx = (idx + 1) % DATA_POINTS_TO_SEND;
-}, 100);
+}, 2000);

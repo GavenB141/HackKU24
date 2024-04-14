@@ -42,7 +42,7 @@ export default class GraphData {
             this.fill.target.value = this.data[0];
         }
         let current = this.data.length - 1;
-        this.last = tweened(this.data[current], {duration: 900});
+        this.last = tweened(this.data[current], {duration: 1000});
         this.last.set(value);
         this.data.push(value);
     }

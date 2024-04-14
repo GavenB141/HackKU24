@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 
 function onLoop() {
     processSaleOrders();
+    backgroundActivity();
+    runMines();
 }
 
 async function processSaleOrders() {
@@ -15,9 +17,8 @@ async function processSaleOrders() {
                 await attemptBuySaleOrder(buyOrder, sellOrder);
             }
         }
-        session.abortTransaction();
-        // await session.commitTransaction();
-        // console.log("transaction committed");
+        await session.commitTransaction();
+        console.log("transaction committed");
     });
 }
 
@@ -48,14 +49,14 @@ async function attemptBuySaleOrder(buyOrder: IBuyOrder, sellOrder: ISellOrder) {
     
     let unit_price = sellOrder.unit_price;
     let cost = quantity * unit_price;
-    seller.balance = seller.balance + cost;
+    seller.balance = Number(seller.balance) + cost;
     
     let oldPortfolioAmount = buyer.portfolio.get(buyOrder.coin) ?? 0;
-    buyer.portfolio.set(buyOrder.coin, oldPortfolioAmount + quantity);
+    buyer.portfolio.set(buyOrder.coin, Number(oldPortfolioAmount) + quantity);
 
     let refundPerUnit = buyOrder.unit_price - sellOrder.unit_price;
     let refund = refundPerUnit * quantity;
-    buyer.balance = buyer.balance + refund;
+    buyer.balance = Number(buyer.balance) + refund;
 
     if (sellOrder.quantity == 0) {
         console.log("delete sellorder");
@@ -72,6 +73,37 @@ async function attemptBuySaleOrder(buyOrder: IBuyOrder, sellOrder: ISellOrder) {
     await seller.save();
     await buyer.save();
     console.log("after", buyOrder, sellOrder, buyer, seller);
+}
+
+async function backgroundActivity() {
+    // TODO: Simulate background behavior
+}
+
+const TIME_TO_MINE_MS = 1000 * 60;
+let last_mine = Date.now() - TIME_TO_MINE_MS;
+async function runMines() {
+    if (Date.now() - last_mine > TIME_TO_MINE_MS) {
+        last_mine = Date.now();
+        console.log("running the mines!")
+        await distributeMined();
+    }
+}
+
+async function distributeMined() {
+    let users = await User.find({});
+    for (let user of users) {
+        let session = await mongoose.startSession();
+        session.withTransaction(async (session) => {
+            let allCoins = Array.from(user.portfolio.keys());
+            if (allCoins.length == 0) return; // no empty lists
+            let minedCoin = allCoins[Math.floor(Math.random() * allCoins.length)];
+            let newCount = Number(user.portfolio.get(minedCoin)) + 1;
+            console.log("mined", user, minedCoin, user.portfolio, newCount);
+            user.portfolio.set(minedCoin, newCount);
+            await user.save();
+            await session.commitTransaction();
+        })
+    }
 }
 
 export function initialize() {

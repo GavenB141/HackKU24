@@ -1,4 +1,4 @@
-import { User, type IUser } from '$lib/database.js';
+import { Coin, User, type IUser } from '$lib/database.js';
 import { verifyAuth } from '$lib/user.js';
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { Decimal128, UUID } from 'mongodb';
@@ -36,7 +36,7 @@ async function sendPortfolioUpdate(userId: string, sink: MessageSink) {
     for (let name of coinsRaw.keys()) {
         coins[name] = {
             count: coinsRaw.get(name).toString(),
-            marketValue: "1", // TODO
+            marketValue: ((await Coin.findById(name))?.last_sold_for?.toString() ?? "1"),
         };
     }
 
