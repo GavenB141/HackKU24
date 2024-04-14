@@ -2,7 +2,7 @@
     import { slide } from "svelte/transition";
 
     
-    let openCategory = ["coins", "coins"];
+    let openCategory = ["coins", "leaderboards"];
     let index = 0;
     export let selected = ["purchase-coins", "sell-coins"];
 </script>

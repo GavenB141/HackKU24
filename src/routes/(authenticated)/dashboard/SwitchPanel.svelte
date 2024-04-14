@@ -1,5 +1,6 @@
 <script lang="ts">
     import { authorizedFetch } from "$lib/userData";
+    import { onMount } from "svelte";
     import BuyOrder from "./BuyOrder.svelte";
     import CoinCreation from "./CoinCreation.svelte";
     import SellOrder from "./SellOrder.svelte";
@@ -15,14 +16,26 @@
 
     const bearerToken = `Bearer ${data.auth.info.accessToken}`;
 
-    (async function getCoins() {
+    async function getCoins() {
         coins = await (await authorizedFetch(`/api/coins`, <string>bearerToken, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
             }
         })).json();
-    })()
+    }
+
+    onMount(()=>{
+        let interval = setInterval(()=>{
+            getCoins();
+            console.log("Getting top coins...")
+        }, 10000);
+
+        return ()=>{
+            clearInterval(interval)
+        }
+    })
+
 </script>
 
 <div class="relative">
