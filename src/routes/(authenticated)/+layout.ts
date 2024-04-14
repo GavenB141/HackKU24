@@ -13,8 +13,6 @@ export const load = (async function(): Promise<{auth:UserAuth, portfolio:UserPor
 
     let authInfo = await authClient?.getAuthenticationInfoOrNull();
 
-    console.log(authInfo);
-
     if(authInfo === null) {
         authClient.logout(false);
         authClient.redirectToLoginPage();
