@@ -43,6 +43,6 @@
             </div>
         </div>
         <Controls />
-        <marquee hidden>Secret marquee</marquee>
+        <marquee class="bg-black" hidden>Secret marquee</marquee>
     </div>
 </div>

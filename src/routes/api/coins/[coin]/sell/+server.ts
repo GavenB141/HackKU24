@@ -1,8 +1,9 @@
 import { SellOrder } from "$lib/database.js";
 import { verifyAuth } from "$lib/user";
+import type { RequestHandler } from "@sveltejs/kit";
 import { UUID } from "mongodb";
 
-export async function POST({request}) {
+export const POST = (async function POST({request, params}) {
     let headers = request.headers;
     let user = await verifyAuth(headers);
     if (!user) {
@@ -10,6 +11,9 @@ export async function POST({request}) {
             status: 401
         })
     }
+
+    let ticker = params.coin;
+    let {quantity, payment} = await request.json();
 
     // TODO modify portfolio
     
@@ -21,4 +25,4 @@ export async function POST({request}) {
     });
     order.save();
     return new Response("");
-}
+}) satisfies RequestHandler;

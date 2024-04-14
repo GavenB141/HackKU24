@@ -28,19 +28,19 @@
     <div class="flex flex-col w-full items-center ">
         <button 
             on:click={()=>{openCategory[index] = "coins"}}
-            class:bg-black={openCategory[index] == "coins"}
+            class:text-coinblue-primary={openCategory[index] == "coins"}
             class="bg-transparent hover:bg-white/20 active:bg-white/20 border-0 border-t
             border-white/50 rounded-none text-left text-xl w-full py-4"
         >Coins</button> 
         <button 
             on:click={()=>{openCategory[index] = "mining"}}
-            class:bg-black={openCategory[index] == "mining"}
+            class:text-coinblue-primary={openCategory[index] == "mining"}
             class="bg-transparent hover:bg-white/20 active:bg-white/20 border-0 border-t
             border-white/50 rounded-none text-left text-xl w-full py-4"
         >Mining</button>
         <button 
-            on:click={()=>{openCategory[index] = "leaderboards"; selected[index] = "leaderboards"}}
-            class:bg-black={openCategory[index] == "leaderboards"}
+            on:click={()=>{openCategory[index] = "leaderboards";}}
+            class:text-coinblue-primary={openCategory[index] == "leaderboards"}
             class="bg-transparent hover:bg-white/20 active:bg-white/20 border-0 border-t
             border-white/50 rounded-none text-left text-xl w-full py-4"
         >Leaderboard</button>
@@ -51,19 +51,19 @@
             <div transition:slide class="flex flex-col w-full">
                 <button 
                     on:click={()=>{selected[index]="purchase-coins"}}
-                    class:bg-black={selected[index] == "purchase-coins"}
+                    class:text-coinblue-primary={selected[index] == "purchase-coins"}
                     class="bg-transparent hover:bg-white/20 active:bg-white/20 border-0 border-t
                     border-white/50 rounded-none text-left w-full py-4"
                 > - Purchase order</button>
                 <button 
                     on:click={()=>{selected[index]="sell-coins"}}
-                    class:bg-black={selected[index] == "sell-coins"}
+                    class:text-coinblue-primary={selected[index] == "sell-coins"}
                     class="bg-transparent hover:bg-white/20 active:bg-white/20 border-0 border-t
                     border-white/50 rounded-none text-left w-full py-4"
                 > - Sell order</button>
                 <button 
                     on:click={()=>{selected[index]="mint-coin"}}
-                    class:bg-black={selected[index] == "mint-coin"}
+                    class:text-coinblue-primary={selected[index] == "mint-coin"}
                     class="bg-transparent hover:bg-white/20 active:bg-white/20 border-0 border-t
                     border-white/50 rounded-none text-left w-full py-4"
                 > - Mint new coin</button> 
@@ -72,19 +72,19 @@
             <div transition:slide class="flex flex-col w-full">
                 <button 
                     on:click={()=>{selected[index]="purchase-cards"}}
-                    class:bg-black={selected[index] == "purchase-cards"}
+                    class:text-coinblue-primary={selected[index]=="purchase-cards"}
                     class="bg-transparent hover:bg-white/20 active:bg-white/20 border-0 border-t
                     border-white/50 rounded-none text-left w-full py-4"
                 > - Purchase mining cards</button>
                 <button 
                     on:click={()=>{selected[index]="allocate-cards"}}
-                    class:bg-black={selected[index] == "allocate-cards"}
+                    class:text-coinblue-primary={selected[index] == "allocate-cards"}
                     class="bg-transparent hover:bg-white/20 active:bg-white/20 border-0 border-t
                     border-white/50 rounded-none text-left w-full py-4"
                 > - Allocate mining cards</button>
                 <button 
                     on:click={()=>{selected[index]="view-mining"}}
-                    class:bg-black={selected[index] == "view-mining"}
+                    class:text-coinblue-primary={selected[index] == "view-mining"}
                     class="bg-transparent hover:bg-white/20 active:bg-white/20 border-0 border-t
                     border-white/50 rounded-none text-left w-full py-4"
                 > - View mining data</button> 
@@ -93,13 +93,13 @@
             <div transition:slide class="flex flex-col w-full">
                 <button 
                     on:click={()=>{selected[index]="top-players"}}
-                    class:bg-black={selected[index] == "top-players"}
+                    class:text-coinblue-primary={selected[index] == "top-players"}
                     class="bg-transparent hover:bg-white/20 active:bg-white/20 border-0 border-t
                     border-white/50 rounded-none text-left w-full py-4"
                 > - Top players</button>
                 <button 
                     on:click={()=>{selected[index]="top-coins"}}
-                    class:bg-black={selected[index] == "top-coins"}
+                    class:text-coinblue-primary={selected[index] == "top-coins"}
                     class="bg-transparent hover:bg-white/20 active:bg-white/20 border-0 border-t
                     border-white/50 rounded-none text-left w-full py-4"
                 > - Top coins</button>
