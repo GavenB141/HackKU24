@@ -1,3 +1,4 @@
+import type SellOrder from "../routes/(authenticated)/dashboard/SellOrder.svelte";
 import { BuyOrder, Coin, SellOrder, User, type IBuyOrder, type ISellOrder } from "./database";
 import mongoose from "mongoose";
 
@@ -78,7 +79,13 @@ async function attemptBuySaleOrder(buyOrder: IBuyOrder, sellOrder: ISellOrder) {
 }
 
 async function backgroundActivity() {
-    // TODO: Simulate background behavior
+    // if (Math.random() > 0.3) return;
+    // if (Math.random() < 0.5) {
+    //     // buy a random
+    //     let order: SellOrder = (await SellOrder.aggregate([{ $sample: { size: 1 } }])).;
+    // } else {
+    //     // sell a random
+    // }
 }
 
 const TIME_TO_MINE_MS = 1000 * 60;

@@ -5,6 +5,7 @@
     import CoinCreation from "./CoinCreation.svelte";
     import SellOrder from "./SellOrder.svelte";
     import Leaderboard from "./leaderboard.svelte";
+    import DummyPanel from "./DummyPanel.svelte";
 
     export let label: string;
     export let selected: string;
@@ -48,6 +49,21 @@
         <SellOrder />
     {:else if selected === "top-coins"}
         <Leaderboard labels={["Ticker", "Last sold @"]} title="Top Coins" items={coins} />
+    {:else if selected === "purchase-cards"}
+        <DummyPanel title="Purchase More Mining Cards">
+            <p>You currently own 1 mining card.</p>
+        </DummyPanel>
+    {:else if selected === "allocate-cards"}
+        <DummyPanel title="Allocate Mining Cards">
+            <p>Allocations (1 Card Total):</p>
+            <br />
+            <ul>
+                <li>Random: 1</li>
+            </ul>
+        </DummyPanel>
+    {:else if selected === "view-mining"}
+        <DummyPanel title="Inspect Mining Records">
+        </DummyPanel>
     {:else}
         <p class="pt-10">{selected}</p>
         {#if selected !== "none"}

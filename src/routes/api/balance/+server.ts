@@ -4,6 +4,7 @@ import { json, type RequestHandler } from '@sveltejs/kit';
 import { Decimal128, UUID } from 'mongodb';
 import { type UserPortfolio } from '$lib/types.js';
 import { MessageSink } from '$lib/messageSink.js';
+import { getUserPortfolio } from '$lib/getPortfolio';
 
 const messageSinks: { [id: string]: MessageSink; } = {};
 function initMessageSink(userId: string) {
@@ -26,21 +27,7 @@ function initMessageSink(userId: string) {
 }
 
 async function sendPortfolioUpdate(userId: string, sink: MessageSink) {
-    let document = await User.findById(new UUID(userId));
-    if (!document) {
-        console.error("stream created for invalid user ID " + userId);
-        throw "invalid user";
-    }
-    let coinsRaw = <Map<string, Decimal128>><unknown>document.portfolio ?? new Map();
-    const coins = {};
-    for (let name of coinsRaw.keys()) {
-        coins[name] = {
-            count: coinsRaw.get(name).toString(),
-            marketValue: ((await Coin.findById(name))?.last_sold_for?.toString() ?? "1"),
-        };
-    }
-
-    let res: UserPortfolio = { liquid: document.balance.toString(), coins: coins };
+    let res: UserPortfolio = await getUserPortfolio(new UUID( userId));
     sink.sendMessage(res)
 }
 

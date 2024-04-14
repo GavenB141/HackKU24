@@ -38,7 +38,7 @@
                 <NetWorthGraph />
             </div>
             <div class="rounded-xl w-full lg:h-full p-2 bg-coingrey-lighter">
-                <p class="text-center">Coin value</p>
+                <p class="text-center">Market Value</p>
                 <CoinGraph />
             </div>
         </div>

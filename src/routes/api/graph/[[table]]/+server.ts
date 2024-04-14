@@ -1,3 +1,5 @@
+import { User } from '$lib/database.js';
+import { getUserPortfolio } from '$lib/getPortfolio.js';
 import { MessageSink } from '$lib/messageSink.js';
 import { verifyAuth } from '$lib/user.js'
 
@@ -28,13 +30,20 @@ async function processStream(sink: MessageSink) {
     SINKS.push(sink);
 }
 
-// a trivial made-up model of the market's history
-setInterval(() => {
-    let lastIdx = idx == 0 ? DATA_POINTS_TO_SEND - 1 : idx - 1;
-    let value = Math.max(history[lastIdx] + (Math.max(history[lastIdx] * 0.10, 1) * (Math.random() - 0.5)), 0);
-    history[idx] = value;
+setInterval(async () => {
+    let total = 0;
+    let users = await User.find({});
+    for (let user of users) {
+        let portfolio = await getUserPortfolio(user._id);
+        total += Number(portfolio.liquid.toString());
+        for (let name of Object.keys(portfolio.coins)) {
+            let coin = portfolio.coins[name];
+            let count = Number(coin['count'].toString());
+            let marketValue = Number(coin['marketValue'].toString());
+            total += count * marketValue;
+        }
+    }
     SINKS.forEach((sink) => {
-        sink.sendMessage(value);
-    });
-    idx = (idx + 1) % DATA_POINTS_TO_SEND;
-}, 2000);
+        sink.sendMessage(total);
+    })
+}, 5000);
